@@ -40,7 +40,7 @@ def main():
     pygame.display.set_caption('Scrolling Video')
 
     # Load the video
-    video_path = 'material/better.mp4'  # Change this to your video file path
+    video_path = 'material/textcrawl.mp4'  # Change this to your video file path
     video = load_video(video_path)
 
     clock = pygame.time.Clock()
