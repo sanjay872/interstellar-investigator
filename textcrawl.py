@@ -19,7 +19,7 @@ def resize_frame(frame, window_width, window_height):
     return frame
 
 # Function to get the next or previous frame based on scroll direction
-def scroll_video(video, direction, skip_frames=10):
+def scroll_video(video, direction, skip_frames=30):
     if direction == 'up':
         # Move to the previous frame
         frame_pos = max(0, video.get(cv2.CAP_PROP_POS_FRAMES) - skip_frames)
@@ -40,7 +40,7 @@ def main():
     pygame.display.set_caption('Scrolling Video')
 
     # Load the video
-    video_path = 'material/textcrawl.mp4'  # Change this to your video file path
+    video_path = 'asserts/textcrawl.mp4'  # Change this to your video file path
     video = load_video(video_path)
 
     clock = pygame.time.Clock()
