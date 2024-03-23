@@ -40,12 +40,13 @@ def main():
     pygame.display.set_caption('Scrolling Video')
 
     # Load the video
-    video_path = 'asserts/textcrawl.mp4'  # Change this to your video file path
+    video_path = 'asserts/textcrawl.mp4'
     video = load_video(video_path)
 
     clock = pygame.time.Clock()
     running = True
     scrolled = False
+    arrow_held = {'up': False, 'down': False}  # Tracks arrow key states
 
     # Display the first frame of the video
     ret, frame = video.read()
@@ -71,11 +72,19 @@ def main():
                     scrolled = True
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
-                    scroll_video(video, 'up')
-                    scrolled = True
+                    arrow_held['up'] = True
                 elif event.key == pygame.K_DOWN:
-                    scroll_video(video, 'down')
-                    scrolled = True
+                    arrow_held['down'] = True
+            elif event.type == pygame.KEYUP:
+                if event.key == pygame.K_UP:
+                    arrow_held['up'] = False
+                elif event.key == pygame.K_DOWN:
+                    arrow_held['down'] = False
+
+        for direction, held in arrow_held.items():
+            if held:
+                scroll_video(video, direction)
+                scrolled = True
 
         if scrolled:
             ret, frame = video.read()
