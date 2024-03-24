@@ -109,7 +109,9 @@ def main():
 
         # Check if the video has reached the end and switch to displaying a blank screen
         if video.get(cv2.CAP_PROP_POS_FRAMES) >= end_position:
-            pygame.quit()
+            break
+        
+    pygame.quit()
 
 if __name__ == "__main__":
     main()
