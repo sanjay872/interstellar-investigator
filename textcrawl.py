@@ -1,6 +1,7 @@
 import pygame
 import cv2
 import pygame.locals as pl
+from pygame import mixer
 
 class VideoPlayer:
     def __init__(self, video_path, window_width=800, window_height=600, skip_frames=30):
@@ -16,6 +17,10 @@ class VideoPlayer:
         self.scrolled = False
         self.arrow_held = {'up': False, 'down': False}
         self.skip_button_rect = pygame.Rect(window_width - 100, window_height - 50, 80, 30)
+        mixer.init()
+        mixer.music.load('asserts/textmusic.mp3')
+        pygame.mixer.music.set_volume(1)  # Set volume (0.0 to 1.0)
+        mixer.music.play(-1)
 
     def load_video(self):
         self.video = cv2.VideoCapture(self.video_path)
@@ -75,6 +80,7 @@ class VideoPlayer:
                         self.scrolled = True
                     elif event.button == 1:  # Check if left mouse button is clicked
                         if self.skip_button_rect.collidepoint(event.pos):  # Check if click is inside skip button
+                            pygame.mixer.music.stop()
                             return # Quit Pygame
 
                 elif event.type == pygame.KEYDOWN:
