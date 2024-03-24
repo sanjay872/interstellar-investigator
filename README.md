@@ -8,7 +8,7 @@ Team members:
 - Gigi Hu (hongzhi5)
 - Vignesh Ram (kuttivicky)
 - Sasha Rolfe (sasha-rolfe)
-- Xiaoqing Mei ()
+- Xiaoqing Mei (xmei12)
 
 Libraries:
 - pygame
