@@ -4,6 +4,7 @@ import math
 from pygame import mixer
 
 class Game:
+    
     def __init__(self):
         pygame.init()   # initialize pygame
         mixer.init()
@@ -17,6 +18,9 @@ class Game:
         self.laser_sound.set_volume(0.1)
         # when player loses
         self.death_sound = mixer.Sound('videogame-death-sound.mp3')
+
+        #when insect dies
+        self.insect_die = mixer.Sound('insect_death.wav')
 
         # asserts
         window_icon = pygame.image.load('./asserts/ufo.png')
@@ -65,6 +69,8 @@ class Game:
         self.screen = pygame.display.set_mode((800, 600))  # passing display width and height
         pygame.display.set_caption('Interstellar Investigator')
         pygame.display.set_icon(window_icon)
+        
+        self.pause=False
 
         self.endGame = False
 
@@ -80,7 +86,9 @@ class Game:
     def collision(self, invaderX, invaderY):
         distance = math.sqrt((invaderX - self.bulletX) ** 2 + (invaderY - self.bulletY) ** 2)
         if distance < 27:
+            self.insect_die.play()
             return True
+
 
     def showScore(self):
         scoreDisplay = self.gameFont.render('Score: ' + str(self.score), True, (255, 255, 255))
@@ -93,7 +101,31 @@ class Game:
         self.screen.blit(gameOverDisplay, (200, 250))
         self.death_sound.play()
 
+    def draw_text(self,text,font, color, surface, x,y):
+        textobj = font.render(text, 1, color)
+        textrect = textobj.get_rect()
+        textrect.topleft = (x,y)
+        surface.blit(textobj, textrect)
+
+    def pause_screen(self):
+        self.pause=True
+        while self.pause:
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        self.pause = False
+            self.screen.fill((150,150,150))
+            font = pygame.font.Font(None,64)
+            self.draw_text("PAUSED", font, (0,0,0), self.screen, 800//2 - 100, 600//2 -50)
+            self.draw_text("Press bksp to exit", font, (0,0,0), self.screen, 800//2 - 100, 600//2 )
+            pygame.display.flip()
+            for event in pygame.event.get():
+                if event.type==pygame.KEYDOWN:
+                    if event.key==pygame.K_BACKSPACE:
+                        self.gameOver()
+                        pygame.quit()
     def run(self):
+
         while not self.endGame:
             self.screen.blit(self.main_background, (0, 0))  # background image and its initial position
 
@@ -116,6 +148,8 @@ class Game:
                             self.bulletY = self.heroSpaceshipY - 30  # bullet position as spaceship position
                             # laser sound while shooting
                             self.laser_sound.play()
+                    if event.key==pygame.K_ESCAPE:
+                        self.pause_screen()
                 if event.type == pygame.KEYUP:
                     self.changeX = 0
                     self.changeY = 0
