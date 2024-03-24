@@ -25,7 +25,10 @@ Other:
 - opengameart.org
 - chosic.com
 
-Screenshots:
-![Alt text](asserts/icons/invader2.png)
-
-
+Screenshots:   
+![Alt text](asserts/screenshots/openingscreen.png)
+![Alt text](asserts/screenshots/textcrawlscreen.png)
+![Alt text](asserts/screenshots/loginscreen.png)
+![Alt text](asserts/screenshots/leaderboardscreen.png)
+![Alt text](asserts/screenshots/gamescreen.png)
+![Alt text](asserts/screenshots/gameoverscreen.png)
