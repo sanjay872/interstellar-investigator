@@ -48,7 +48,7 @@ def main():
     scrolled = False
     arrow_held = {'up': False, 'down': False}  # Tracks arrow key states
 
-    # Display the first frame of the video
+    # Display the video
     ret, frame = video.read()
     if ret:
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)  # Convert frame to RGB
@@ -56,6 +56,9 @@ def main():
         frame = pygame.surfarray.make_surface(frame.swapaxes(0, 1))  # Swap axes for Pygame display
         window.blit(frame, (0, 0))
         pygame.display.flip()
+    
+    # Calculate the end position of the video
+    end_position = video.get(cv2.CAP_PROP_FRAME_COUNT)
 
     while running:
         scrolled = False  # Reset scrolled flag
@@ -104,7 +107,9 @@ def main():
 
         clock.tick(60)  # Adjust the frame rate as needed
 
-    pygame.quit()
+        # Check if the video has reached the end and switch to displaying a blank screen
+        if video.get(cv2.CAP_PROP_POS_FRAMES) >= end_position:
+            pygame.quit()
 
 if __name__ == "__main__":
     main()
