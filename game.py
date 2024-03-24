@@ -106,6 +106,7 @@ class Game:
         gameOverDisplay = gameOverFont.render('GAME OVER', True, (255, 255, 255))
         self.screen.blit(gameOverDisplay, (200, 250))
         self.death_sound.play()
+        self.db.update_player_score(self.user_name, self.score)
 
     def draw_text(self,text,font, color, surface, x,y):
         textobj = font.render(text, 1, color)
