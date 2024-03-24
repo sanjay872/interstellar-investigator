@@ -1,11 +1,11 @@
 import pygame
 import random
 import math
+from database import GameDatabase
 from pygame import mixer
 
 class Game:
-    
-    def __init__(self):
+    def __init__(self, name):
         pygame.init()   # initialize pygame
         mixer.init()
 
@@ -50,6 +50,10 @@ class Game:
         self.invaderYSpeeds = []
         self.numOfInvaders = 6
 
+        #DB
+        self.db = GameDatabase()
+        self.user_name = name
+
         for i in range(self.numOfInvaders):
             self.invaderImages.append(pygame.image.load('./asserts/invader.png'))
             self.invaderXs.append(random.randint(0, 738))
@@ -63,7 +67,7 @@ class Game:
         self.bulletY = 465
 
         # score
-        self.score = 0
+        self.score = self.db.get_player_score(self.user_name)
         self.gameFont = pygame.font.Font('freesansbold.ttf', 32)
 
         self.screen = pygame.display.set_mode((800, 600))  # passing display width and height
