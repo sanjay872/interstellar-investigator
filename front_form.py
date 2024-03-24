@@ -1,8 +1,5 @@
 import pygame
-import sys
-import time
 from database import GameDatabase
-from game import Game
 from leaderboard import display_leaderboard
 
 
@@ -31,7 +28,7 @@ class GameStartScreen:
         )
 
         self.leaderboard_button_image = pygame.transform.scale(
-            pygame.image.load('./asserts/podium.png').convert_alpha(),
+            pygame.image.load('./asserts/icons/podium.png').convert_alpha(),
             button_scale_size
         )
 

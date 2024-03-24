@@ -73,7 +73,7 @@ def start_screen():
 def game_screen(input_text):
     while True:
         screen.fill(WHITE)
-        if input_text == 'Rumplestiltskin':
+        if input_text == 'rumplestiltskin':
             draw_text("you won!",font, (0,255,0),screen,300,400)
         else:
             draw_text("you lost!",font, (255,0,0),screen,300,400)            

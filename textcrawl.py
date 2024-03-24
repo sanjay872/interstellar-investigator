@@ -18,7 +18,7 @@ class VideoPlayer:
         self.arrow_held = {'up': False, 'down': False}
         self.skip_button_rect = pygame.Rect(window_width - 100, window_height - 50, 80, 30)
         mixer.init()
-        mixer.music.load('asserts/textmusic.mp3')
+        mixer.music.load('asserts/media/textmusic.mp3')
         pygame.mixer.music.set_volume(1)  # Set volume (0.0 to 1.0)
         mixer.music.play(-1)
 

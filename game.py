@@ -5,9 +5,11 @@ from database import GameDatabase
 from pygame import mixer
 
 class Game:
-    def __init__(self, name):
+    def __init__(self, name, powerUp=False):
         pygame.init()   # initialize pygame
         mixer.init()
+
+        self.powerUp = powerUp
 
         # background music
         mixer.music.load('Rock_Metal_Valhalla_by_Alexander_Nakarada.mp3')
@@ -194,7 +196,11 @@ class Game:
                     self.shoot = False
 
                     # increase the score
-                    self.score += 1
+                    if self.powerUp:
+                        self.score += 2
+                    else:
+                        self.score += 1
+                        
                 self.invader(self.invaderXs[i], self.invaderYs[i])
 
             # shooting

@@ -3,7 +3,7 @@ from game import Game
 from front_form import GameStartScreen
 
 def main():
-    player = VideoPlayer('asserts/textcrawl.mp4')
+    player = VideoPlayer('asserts/media/textcrawl.mp4')
     player.main()
 
     game_start_screen = GameStartScreen()
