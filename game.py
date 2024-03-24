@@ -1,6 +1,7 @@
 import pygame
 import random
 import math
+from database import GameDatabase
 
 pygame.init()   # initialize the pygame
 
@@ -80,7 +81,7 @@ def gameOver():
 
 while not endGame:
     screen.blit(main_background,(0,0)) # background image and its inital position
-    
+
     for event in pygame.event.get(): # event monitoring
         if event.type==pygame.QUIT:
             endGame=True
@@ -140,7 +141,7 @@ while not endGame:
             # increase the score
             score+=1
         invader(invaderXs[i],invaderYs[i]) 
-       
+    
     # shooting
         
     if bulletY<=0: # resetting the bullet
