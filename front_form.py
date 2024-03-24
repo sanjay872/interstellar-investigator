@@ -78,14 +78,14 @@ class GameStartScreen:
                             self.db.create_new_player(input_text)
                             print("Start game...")
                             # TODO: Start the game
-                            running = False
+                            return input_text
                     elif continue_button_rect.collidepoint(event.pos):
                         # Continue button logic
                         if self.db.check_if_user_exists(input_text):
                             # Start the game with existing player
                             print("Continuing game...")
                             # TODO: Start the game
-                            running = False
+                            return input_text
 
                         else:
                             # Notify user the name does not exist

@@ -1,9 +1,10 @@
 from pymongo import MongoClient
+import environment
 
 class GameDatabase:
     def __init__(self):
-        self.uri = 'mongodb+srv://hhu:hhu@interstellar-investigat.k1riaic.mongodb.net/'
-        self.db_name = "test_game_database"
+        self.uri = environment.MONGO_URL
+        self.db_name = environment.DATABASE_NAME
         self.client = MongoClient(self.uri)
         self.db = self.client[self.db_name]
         self.users_collection = self.db['users']

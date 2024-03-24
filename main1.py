@@ -7,9 +7,9 @@ def main():
     player.main()
 
     game_start_screen = GameStartScreen()
-    game_start_screen.start_screen()
+    name = game_start_screen.start_screen()
 
-    game = Game()
+    game = Game(name)
     game.run()
 
 main()
