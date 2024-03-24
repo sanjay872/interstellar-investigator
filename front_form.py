@@ -35,7 +35,7 @@ class GameStartScreen:
             button_scale_size
         )
 
-        self.font = pygame.font.Font(None, 36)
+        self.font = pygame.font.Font('./asserts/font/Gortem.ttf', 40)
 
     def draw_buttons(self, new_button_rect, continue_button_rect):
         self.screen.blit(self.new_button_image, new_button_rect)
@@ -48,7 +48,7 @@ class GameStartScreen:
 
 
     def draw_text(self, text, color, x, y):
-        text_obj = self.font.render(text, True, (255,0,0))
+        text_obj = self.font.render(text, True, (255,255,255))
         text_rect = text_obj.get_rect()
         text_rect.topleft = (x, y)
         self.screen.blit(text_obj, text_rect)
@@ -73,7 +73,7 @@ class GameStartScreen:
         while running:
             self.screen.fill((0,0,0))
             self.draw_text("Enter Your Name:", self.BLACK, 300, 200)
-            self.draw_input_box(input_box_rect.x, input_box_rect.y, input_box_rect.width, input_box_rect.height, input_text, self.BLACK)
+            self.draw_input_box(input_box_rect.x, input_box_rect.y, input_box_rect.width, input_box_rect.height, input_text, self.WHITE)
 
             leaderboard_button_rect = self.draw_leader()
 
@@ -83,6 +83,8 @@ class GameStartScreen:
 
             for event in pygame.event.get():
                 if current_screen == "start":
+                    if event.type == pygame.QUIT:
+                        pygame.quit()
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         if leaderboard_button_rect.collidepoint(event.pos):
                             current_screen = "leaderboard"  # Switch to leaderboard screen
