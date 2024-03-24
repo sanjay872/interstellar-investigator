@@ -122,7 +122,7 @@ class VideoPlayer:
         pygame.quit()
 
     def draw_skip(self):
-        pygame.draw.rect(self.window, (255, 255, 0), self.skip_button_rect)  
+        pygame.draw.rect(self.window, (255, 211, 0), self.skip_button_rect)  
         skip_button_font = pygame.font.Font(None, 24)
         skip_button_text = skip_button_font.render("Skip", True, (0, 0, 0))
         skip_button_text_rect = skip_button_text.get_rect(center=self.skip_button_rect.center)
