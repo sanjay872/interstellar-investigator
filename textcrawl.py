@@ -19,7 +19,7 @@ def resize_frame(frame, window_width, window_height):
     return frame
 
 # Function to get the next or previous frame based on scroll direction
-def scroll_video(video, direction, skip_frames=10):
+def scroll_video(video, direction, skip_frames=30):
     if direction == 'up':
         # Move to the previous frame
         frame_pos = max(0, video.get(cv2.CAP_PROP_POS_FRAMES) - skip_frames)
@@ -40,14 +40,15 @@ def main():
     pygame.display.set_caption('Scrolling Video')
 
     # Load the video
-    video_path = 'material/textcrawl.mp4'  # Change this to your video file path
+    video_path = 'asserts/textcrawl.mp4'
     video = load_video(video_path)
 
     clock = pygame.time.Clock()
     running = True
     scrolled = False
+    arrow_held = {'up': False, 'down': False}  # Tracks arrow key states
 
-    # Display the first frame of the video
+    # Display the video
     ret, frame = video.read()
     if ret:
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)  # Convert frame to RGB
@@ -55,6 +56,9 @@ def main():
         frame = pygame.surfarray.make_surface(frame.swapaxes(0, 1))  # Swap axes for Pygame display
         window.blit(frame, (0, 0))
         pygame.display.flip()
+    
+    # Calculate the end position of the video
+    end_position = video.get(cv2.CAP_PROP_FRAME_COUNT)
 
     while running:
         scrolled = False  # Reset scrolled flag
@@ -71,11 +75,19 @@ def main():
                     scrolled = True
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
-                    scroll_video(video, 'up')
-                    scrolled = True
+                    arrow_held['up'] = True
                 elif event.key == pygame.K_DOWN:
-                    scroll_video(video, 'down')
-                    scrolled = True
+                    arrow_held['down'] = True
+            elif event.type == pygame.KEYUP:
+                if event.key == pygame.K_UP:
+                    arrow_held['up'] = False
+                elif event.key == pygame.K_DOWN:
+                    arrow_held['down'] = False
+
+        for direction, held in arrow_held.items():
+            if held:
+                scroll_video(video, direction)
+                scrolled = True
 
         if scrolled:
             ret, frame = video.read()
@@ -95,6 +107,10 @@ def main():
 
         clock.tick(60)  # Adjust the frame rate as needed
 
+        # Check if the video has reached the end and switch to displaying a blank screen
+        if video.get(cv2.CAP_PROP_POS_FRAMES) >= end_position:
+            break
+        
     pygame.quit()
 
 if __name__ == "__main__":

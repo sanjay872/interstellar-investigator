@@ -4,13 +4,25 @@ import math
 from database import GameDatabase
 
 pygame.init()   # initialize the pygame
+from pygame import mixer
+mixer.init()
+
+#background-music
+mixer.music.load('Rock_Metal_Valhalla_by_Alexander_Nakarada.mp3')
+pygame.mixer.music.set_volume(0.3)  # Set volume (0.0 to 1.0)
+mixer.music.play(-1)
+
+laser_sound= mixer.Sound('laser_shoot.mp3')
+laser_sound.set_volume(0.1)
+#when player loses
+death_sound=mixer.Sound('videogame-death-sound.mp3')
 
 # asserts
 window_icon=pygame.image.load('./asserts/ufo.png')
 main_background=pygame.image.load('./asserts/17520.jpg')
-hero_spaceship=pygame.image.load('./asserts/spaceship.png')
-invader_img=pygame.image.load('./asserts/invader.png')
-bullet=pygame.image.load('./asserts/bullet.png')
+hero_spaceship=pygame.image.load('./asserts/spaceship2.png')
+invader_img=pygame.image.load('./asserts/invader2.png')
+bullet=pygame.image.load('./asserts/bullet2.png')
 
 #Limits
 heroXStartLimit=0
@@ -64,6 +76,7 @@ def invader(invaderX,invaderY):
 def attack():
     screen.blit(bullet,(bulletX,bulletY))
 
+
 def collision(invaderX,invaderY):
     distance=math.sqrt((invaderX-bulletX)**2+(invaderY-bulletY)**2)
     if distance<27:
@@ -78,6 +91,7 @@ def gameOver():
     gameOverFont=pygame.font.Font('freesansbold.ttf',64)
     gameOverDisplay=gameOverFont.render('GAME OVER',True,(255,255,255))
     screen.blit(gameOverDisplay,(200,250))
+    death_sound.play()
 
 while not endGame:
     screen.blit(main_background,(0,0)) # background image and its inital position
@@ -99,6 +113,8 @@ while not endGame:
                     shoot=True
                     bulletX=heroSpaceshipX+15 # bullet postion as spaceship position
                     bulletY=heroSpaceshipY-30 # bullet postion as spaceship position
+                        #laser sound while shooting
+                    laser_sound.play()
         if event.type==pygame.KEYUP:
             changeX=0
             changeY=0
