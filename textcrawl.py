@@ -1,117 +1,110 @@
 import pygame
-import pygame.locals as pl
 import cv2
 
-# Function to load a video file
-def load_video(video_path):
-    cap = cv2.VideoCapture(video_path)
-    return cap
+import pygame.locals as pl
 
-# Function to resize the frame to fit window dimensions
-def resize_frame(frame, window_width, window_height):
-    frame_height, frame_width, _ = frame.shape
-    if frame_width > frame_height:
-        new_height = int(frame_height * (window_width / frame_width))
-        frame = cv2.resize(frame, (window_width, new_height))
-    else:
-        new_width = int(frame_width * (window_height / frame_height))
-        frame = cv2.resize(frame, (new_width, window_height))
-    return frame
+class VideoPlayer:
+    def __init__(self, video_path, window_width=800, window_height=600, skip_frames=30):
+        self.video_path = video_path
+        self.window_width = window_width
+        self.window_height = window_height
+        self.skip_frames = skip_frames
+        self.video = None
+        self.end_position = 0
+        self.window = None
+        self.clock = None
+        self.running = False
+        self.scrolled = False
+        self.arrow_held = {'up': False, 'down': False}
 
-# Function to get the next or previous frame based on scroll direction
-def scroll_video(video, direction, skip_frames=30):
-    if direction == 'up':
-        # Move to the previous frame
-        frame_pos = max(0, video.get(cv2.CAP_PROP_POS_FRAMES) - skip_frames)
-        video.set(cv2.CAP_PROP_POS_FRAMES, frame_pos)
-    elif direction == 'down':
-        # Move to the next frame
-        frame_pos = min(video.get(cv2.CAP_PROP_FRAME_COUNT) - 1, video.get(cv2.CAP_PROP_POS_FRAMES) + skip_frames)
-        video.set(cv2.CAP_PROP_POS_FRAMES, frame_pos)
+    def load_video(self):
+        self.video = cv2.VideoCapture(self.video_path)
+        self.end_position = self.video.get(cv2.CAP_PROP_FRAME_COUNT)
 
-# Main function
-def main():
-    pygame.init()
-
-    # Set up Pygame window
-    window_width = 800
-    window_height = 600
-    window = pygame.display.set_mode((window_width, window_height))
-    pygame.display.set_caption('Scrolling Video')
-
-    # Load the video
-    video_path = 'asserts/textcrawl.mp4'
-    video = load_video(video_path)
-
-    clock = pygame.time.Clock()
-    running = True
-    scrolled = False
-    arrow_held = {'up': False, 'down': False}  # Tracks arrow key states
-
-    # Display the video
-    ret, frame = video.read()
-    if ret:
-        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)  # Convert frame to RGB
-        frame = resize_frame(frame, window_width, window_height)
-        frame = pygame.surfarray.make_surface(frame.swapaxes(0, 1))  # Swap axes for Pygame display
-        window.blit(frame, (0, 0))
-        pygame.display.flip()
-    
-    # Calculate the end position of the video
-    end_position = video.get(cv2.CAP_PROP_FRAME_COUNT)
-
-    while running:
-        scrolled = False  # Reset scrolled flag
-        
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-            elif event.type == pl.MOUSEBUTTONDOWN:
-                if event.button == 4:  # scroll up
-                    scroll_video(video, 'up')
-                    scrolled = True
-                elif event.button == 5:  # scroll down
-                    scroll_video(video, 'down')
-                    scrolled = True
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_UP:
-                    arrow_held['up'] = True
-                elif event.key == pygame.K_DOWN:
-                    arrow_held['down'] = True
-            elif event.type == pygame.KEYUP:
-                if event.key == pygame.K_UP:
-                    arrow_held['up'] = False
-                elif event.key == pygame.K_DOWN:
-                    arrow_held['down'] = False
-
-        for direction, held in arrow_held.items():
-            if held:
-                scroll_video(video, direction)
-                scrolled = True
-
-        if scrolled:
-            ret, frame = video.read()
-            if ret:
-                frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)  # Convert frame to RGB
-                frame = resize_frame(frame, window_width, window_height)
-                frame = pygame.surfarray.make_surface(frame.swapaxes(0, 1))  # Swap axes for Pygame display
-                window.blit(frame, (0, 0))
-                pygame.display.flip()
-            else:
-                # Reset video to loop
-                video.set(cv2.CAP_PROP_POS_FRAMES, 0)
-                scrolled = False
+    def resize_frame(self, frame):
+        frame_height, frame_width, _ = frame.shape
+        if frame_width > frame_height:
+            new_height = int(frame_height * (self.window_width / frame_width))
+            frame = cv2.resize(frame, (self.window_width, new_height))
         else:
-            # Pause the video by not reading the next frame
-            pass
+            new_width = int(frame_width * (self.window_height / frame_height))
+            frame = cv2.resize(frame, (new_width, self.window_height))
+        return frame
 
-        clock.tick(60)  # Adjust the frame rate as needed
+    def scroll_video(self, direction):
+        if direction == 'up':
+            frame_pos = max(0, self.video.get(cv2.CAP_PROP_POS_FRAMES) - self.skip_frames)
+            self.video.set(cv2.CAP_PROP_POS_FRAMES, frame_pos)
+        elif direction == 'down':
+            frame_pos = min(self.video.get(cv2.CAP_PROP_FRAME_COUNT) - 1, self.video.get(cv2.CAP_PROP_POS_FRAMES) + self.skip_frames)
+            self.video.set(cv2.CAP_PROP_POS_FRAMES, frame_pos)
 
-        # Check if the video has reached the end and switch to displaying a blank screen
-        if video.get(cv2.CAP_PROP_POS_FRAMES) >= end_position:
-            break
-        
-    pygame.quit()
+    def main(self):
+        pygame.init()
 
-if __name__ == "__main__":
-    main()
+        self.window = pygame.display.set_mode((self.window_width, self.window_height))
+        pygame.display.set_caption('Scrolling Video')
+
+        self.load_video()
+
+        self.clock = pygame.time.Clock()
+        self.running = True
+        self.scrolled = False
+
+        ret, frame = self.video.read()
+        if ret:
+            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            frame = self.resize_frame(frame)
+            frame = pygame.surfarray.make_surface(frame.swapaxes(0, 1))
+            self.window.blit(frame, (0, 0))
+            pygame.display.flip()
+
+        while self.running:
+            self.scrolled = False
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.running = False
+                elif event.type == pl.MOUSEBUTTONDOWN:
+                    if event.button == 4:
+                        self.scroll_video('up')
+                        self.scrolled = True
+                    elif event.button == 5:
+                        self.scroll_video('down')
+                        self.scrolled = True
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_UP:
+                        self.arrow_held['up'] = True
+                    elif event.key == pygame.K_DOWN:
+                        self.arrow_held['down'] = True
+                elif event.type == pygame.KEYUP:
+                    if event.key == pygame.K_UP:
+                        self.arrow_held['up'] = False
+                    elif event.key == pygame.K_DOWN:
+                        self.arrow_held['down'] = False
+
+            for direction, held in self.arrow_held.items():
+                if held:
+                    self.scroll_video(direction)
+                    self.scrolled = True
+
+            if self.scrolled:
+                ret, frame = self.video.read()
+                if ret:
+                    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                    frame = self.resize_frame(frame)
+                    frame = pygame.surfarray.make_surface(frame.swapaxes(0, 1))
+                    self.window.blit(frame, (0, 0))
+                    pygame.display.flip()
+                else:
+                    self.video.set(cv2.CAP_PROP_POS_FRAMES, 0)
+                    self.scrolled = False
+            else:
+                pass
+
+            self.clock.tick(60)
+
+            if self.video.get(cv2.CAP_PROP_POS_FRAMES) >= self.end_position:
+                break
+
+        pygame.quit()
