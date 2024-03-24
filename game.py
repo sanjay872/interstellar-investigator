@@ -19,9 +19,9 @@ death_sound=mixer.Sound('videogame-death-sound.mp3')
 # asserts
 window_icon=pygame.image.load('./asserts/ufo.png')
 main_background=pygame.image.load('./asserts/17520.jpg')
-hero_spaceship=pygame.image.load('./asserts/spaceship.png')
-invader_img=pygame.image.load('./asserts/invader.png')
-bullet=pygame.image.load('./asserts/bullet.png')
+hero_spaceship=pygame.image.load('./asserts/spaceship2.png')
+invader_img=pygame.image.load('./asserts/invader2.png')
+bullet=pygame.image.load('./asserts/bullet2.png')
 
 #Limits
 heroXStartLimit=0
