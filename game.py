@@ -12,24 +12,24 @@ class Game:
         self.powerUp = powerUp
 
         # background music
-        mixer.music.load('Rock_Metal_Valhalla_by_Alexander_Nakarada.mp3')
+        mixer.music.load('./asserts/media/Rock_Metal_Valhalla_by_Alexander_Nakarada.mp3')
         pygame.mixer.music.set_volume(0.3)  # Set volume (0.0 to 1.0)
         mixer.music.play(-1)
 
-        self.laser_sound = mixer.Sound('laser_shoot.mp3')
+        self.laser_sound = mixer.Sound('./asserts/media/laser_shoot.mp3')
         self.laser_sound.set_volume(0.1)
         # when player loses
-        self.death_sound = mixer.Sound('videogame-death-sound.mp3')
+        self.death_sound = mixer.Sound('./asserts/media/videogame-death-sound.mp3')
 
         #when insect dies
-        self.insect_die = mixer.Sound('insect_death.wav')
+        self.insect_die = mixer.Sound('./asserts/media/insect_death.wav')
 
         # asserts
-        window_icon = pygame.image.load('./asserts/ufo.png')
-        self.main_background = pygame.image.load('./asserts/17520.jpg')
-        self.hero_spaceship = pygame.image.load('./asserts/spaceship2.png')
-        self.invader_img = pygame.image.load('./asserts/invader2.png')
-        self.bullet = pygame.image.load('./asserts/bullet2.png')
+        window_icon = pygame.image.load('./asserts/icons/ufo.png')
+        self.main_background = pygame.image.load('./asserts/icons/17520.jpg')
+        self.hero_spaceship = pygame.image.load('./asserts/icons/spaceship2.png')
+        self.invader_img = pygame.image.load('./asserts/icons/invader2.png')
+        self.bullet = pygame.image.load('./asserts/icons/bullet2.png')
 
         # Limits
         self.heroXStartLimit = 0
@@ -57,7 +57,7 @@ class Game:
         self.user_name = name
 
         for i in range(self.numOfInvaders):
-            self.invaderImages.append(pygame.image.load('./asserts/invader.png'))
+            self.invaderImages.append(pygame.image.load('./asserts/icons/invader.png'))
             self.invaderXs.append(random.randint(0, 738))
             self.invaderYs.append(random.randint(30, 150))
             self.invaderXSpeeds.append(.5)
